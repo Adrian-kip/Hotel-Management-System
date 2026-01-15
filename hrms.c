@@ -57,3 +57,8 @@ void menu() {
         }
     } while(choice != 4);
 }
+
+float calculateBill(int roomType, int nights) {
+    float price = (roomType == 1) ? 3000 : 5000;
+    return price * nights;
+}
