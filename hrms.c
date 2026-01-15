@@ -62,3 +62,35 @@ float calculateBill(int roomType, int nights) {
     float price = (roomType == 1) ? 3000 : 5000;
     return price * nights;
 }
+void bookRoom() {
+    struct Customer c;
+    FILE *file = fopen(FILE_NAME, "a");
+
+    if (file == NULL) {
+        printf("File error!\n");
+        return;
+    }
+
+    printf("Enter customer name: ");
+    getchar();
+    fgets(c.name, sizeof(c.name), stdin);
+    c.name[strcspn(c.name, "\n")] = 0;
+
+    printf("Enter ID number: ");
+    scanf("%s", c.id);
+
+    printf("Room type:\n1. One Bedroom (3000)\n2. Two Bedroom (5000)\nChoice: ");
+    scanf("%d", &c.roomType);
+
+    printf("Number of nights: ");
+    scanf("%d", &c.nights);
+
+    c.bill = calculateBill(c.roomType, c.nights);
+
+    fprintf(file, "%s,%s,%d,%d,%.2f\n",
+            c.name, c.id, c.roomType, c.nights, c.bill);
+
+    fclose(file);
+
+    printf("Booking successful! Total bill: %.2f\n", c.bill);
+}
