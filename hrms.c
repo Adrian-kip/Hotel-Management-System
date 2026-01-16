@@ -94,3 +94,44 @@ void bookRoom() {
 
     printf("Booking successful! Total bill: %.2f\n", c.bill);
 }
+// -----------------------------------------------------
+// CANCEL BOOKING: Removes booking using ID number
+// -----------------------------------------------------
+void cancelBooking() {
+    char id[20];
+    int found = 0;
+    struct Customer c;
+
+    FILE *file = fopen(FILE_NAME, "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (file == NULL) {
+        printf("No records found.\n");
+        return;
+    }
+
+    printf("Enter ID number to cancel booking: ");
+    scanf("%s", id);
+
+    // Copy all records except the one to delete
+    while (fscanf(file, "%[^,],%[^,],%d,%d,%f\n",
+                  c.name, c.id, &c.roomType, &c.nights, &c.bill) != EOF) {
+
+        if (strcmp(c.id, id) != 0) {
+            // Write this record to temp file
+            fprintf(temp, "%s,%s,%d,%d,%.2f\n",
+                    c.name, c.id, c.roomType, c.nights, c.bill);
+        } else {
+            found = 1;  // The record to cancel was found
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    // Replace original file with updated one
+    remove(FILE_NAME);
+    rename("temp.txt", FILE_NAME);
+
+    if (found)
+        printf("Booking cancelled successfully.\n");
