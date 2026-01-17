@@ -97,6 +97,29 @@ void bookRoom() {
 // -----------------------------------------------------
 // CANCEL BOOKING: Removes booking using ID number
 // -----------------------------------------------------
+void viewRecords() {
+    struct Customer c;
+    FILE *file = fopen(FILE_NAME, "r");
+
+    if (file == NULL) {
+        printf("No records found.\n");
+        return;
+    }
+
+    printf("\n--- CUSTOMER RECORDS ---\n");
+    while (fscanf(file, "%[^,],%[^,],%d,%d,%f\n",
+                  c.name, c.id, &c.roomType, &c.nights, &c.bill) != EOF) {
+
+        printf("\nName: %s\nID: %s\nRoom: %s\nNights: %d\nBill: %.2f\n",
+               c.name,
+               c.id,
+               (c.roomType == 1) ? "One Bedroom" : "Two Bedroom",
+               c.nights,
+               c.bill);
+    }
+    fclose(file);
+}
+
 void cancelBooking() {
     char id[20];
     int found = 0;
@@ -135,3 +158,9 @@ void cancelBooking() {
 
     if (found)
         printf("Booking cancelled successfully.\n");
+   else 
+        printf("Booking not found .\n");
+}
+
+
+
